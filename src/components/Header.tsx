@@ -3,6 +3,8 @@ import { Link, useLocation } from "react-router";
 import { Menu, X } from "lucide-react";
 
 
+import TopStatsBar from "@/components/TopStatsBar";
+
 const navLinks = [
   { label: "THE PLATFORM", href: "/platform" },
   { label: "THE BOOK", href: "/book" },
@@ -28,9 +30,10 @@ export default function Header() {
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         scrolled
           ? "bg-navy-deep/95 backdrop-blur-xl border-b border-border shadow-lg shadow-black/20"
-          : "bg-transparent"
+          : "bg-navy-deep/80 backdrop-blur-md border-b border-blueprint/20"
       }`}
     >
+      <TopStatsBar />
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 md:h-18 items-center justify-between">
           {/* Logo */}

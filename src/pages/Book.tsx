@@ -1,9 +1,10 @@
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router";
 import { Check, ArrowRight, ExternalLink } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-
+import ChapterOneReader from "@/components/ChapterOneReader";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 30 },
@@ -14,7 +15,7 @@ const stagger = {
   visible: { transition: { staggerChildren: 0.12 } },
 };
 
-function HeroSection() {
+function HeroSection({ onOpenChapterOne }: { onOpenChapterOne: () => void }) {
   return (
     <section className="relative min-h-[80vh] flex items-center justify-center overflow-hidden">
       <div className="absolute inset-0 blueprint-grid opacity-60" />
@@ -87,6 +88,13 @@ function HeroSection() {
                 Order Your Copy
                 <ArrowRight className="h-4 w-4" />
               </Link>
+              <button
+                type="button"
+                onClick={onOpenChapterOne}
+                className="inline-flex items-center gap-2 px-6 py-3.5 border border-accent-blue/40 text-foreground hover:text-white hover:bg-accent-blue/10 text-xs font-semibold tracking-[0.12em] uppercase transition-all cursor-pointer"
+              >
+                Read Chapter 1 Free (No Sign-Up)
+              </button>
             </div>
           </motion.div>
         </motion.div>
@@ -197,15 +205,22 @@ function DistributorsSection() {
 }
 
 export default function Book() {
+  const [readerOpen, setReaderOpen] = useState(false);
+
   return (
     <div className="min-h-screen bg-background text-foreground">
       <Header />
       <main>
-        <HeroSection />
+        <HeroSection onOpenChapterOne={() => setReaderOpen(true)} />
         <TimelineSection />
         <DistributorsSection />
       </main>
       <Footer />
+
+      <ChapterOneReader
+        isOpen={readerOpen}
+        onClose={() => setReaderOpen(false)}
+      />
     </div>
   );
 }

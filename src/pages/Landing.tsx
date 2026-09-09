@@ -1,11 +1,11 @@
 import { motion, useInView } from "framer-motion";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { Link } from "react-router";
-import { ArrowRight, Check } from "lucide-react";
+import { ArrowRight, Check, BookOpen, Users, Award, Vote, PhoneCall, Sparkles, Shield, ChevronRight, Eye } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import JoinForm from "@/components/JoinForm";
-
+import ChapterOneReader from "@/components/ChapterOneReader";
 
 /* ─── Shared animation helpers ─── */
 const fadeUp = {
@@ -56,27 +56,10 @@ function EyeIcon({ className = "h-6 w-6" }: { className?: string }) {
     </svg>
   );
 }
-function UsersIcon({ className = "h-6 w-6" }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" className={className}>
-      <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
-      <circle cx="9" cy="7" r="4" />
-      <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
-      <path d="M16 3.13a4 4 0 0 1 0 7.75" />
-    </svg>
-  );
-}
 function BoltIcon({ className = "h-6 w-6" }: { className?: string }) {
   return (
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" className={className}>
       <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
-    </svg>
-  );
-}
-function ScaleIcon({ className = "h-6 w-6" }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" className={className}>
-      <path d="M12 3v18" /><path d="M5 7l7-4 7 4" /><path d="M5 7l3 6h0a5 5 0 0 0 8 0h0l3-6" /><circle cx="5" cy="16" r="2" /><circle cx="19" cy="16" r="2" />
     </svg>
   );
 }
@@ -91,30 +74,35 @@ function UsersGroupIcon({ className = "h-6 w-6" }: { className?: string }) {
 }
 
 /* ═══════════════════════════════════════════
-   SECTION 2 — HERO
+   SECTION 1 — HERO
    ═══════════════════════════════════════════ */
-function HeroSection() {
+function HeroSection({ onOpenChapterOne }: { onOpenChapterOne: () => void }) {
   return (
-    <section className="relative min-h-screen flex items-center overflow-hidden pt-16">
+    <section className="relative min-h-screen flex items-center overflow-hidden pt-24 sm:pt-28 pb-16">
       {/* Hero background image — Capitol with lightning and crowd */}
       <div
         className="absolute inset-0 bg-cover bg-center bg-no-repeat"
         style={{ backgroundImage: "url(/hero-bg.png)" }}
       />
       {/* Dark overlay for text readability */}
-      <div className="absolute inset-0 bg-gradient-to-r from-[#050A10]/90 via-[#050A10]/75 to-[#050A10]/60" />
+      <div className="absolute inset-0 bg-gradient-to-r from-[#050A10]/95 via-[#050A10]/85 to-[#050A10]/70" />
       {/* Bottom gradient fade to page background */}
       <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent" />
       {/* Subtle blueprint grid overlay */}
       <div className="absolute inset-0 blueprint-grid opacity-20" />
 
-      <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 w-full py-16 md:py-20">
+      <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 w-full py-12 md:py-16">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center">
           {/* LEFT — Text + Form */}
           <motion.div initial="hidden" animate="visible" variants={stagger}>
+            <motion.div variants={fadeUp} className="inline-flex items-center gap-2 px-3 py-1 bg-accent-blue/10 border border-accent-blue/30 text-accent-blue text-[11px] font-condensed font-bold tracking-[0.2em] uppercase mb-4">
+              <Sparkles className="h-3.5 w-3.5 text-cyan-glow" />
+              League for Representative Democracy
+            </motion.div>
+
             <motion.h1
               variants={fadeUp}
-              className="font-heading text-[3.5rem] sm:text-[4.5rem] md:text-[5.5rem] lg:text-[6.5rem] leading-[0.88] tracking-wide text-foreground"
+              className="font-heading text-[3.2rem] sm:text-[4.2rem] md:text-[5.2rem] lg:text-[6rem] leading-[0.9] tracking-wide text-foreground"
             >
               THE POWER
               <br />
@@ -123,62 +111,73 @@ function HeroSection() {
               <span className="text-accent-blue">THE PEOPLE.</span>
             </motion.h1>
 
-            <motion.p variants={fadeUp} className="mt-6 text-base sm:text-lg text-foreground font-medium leading-relaxed max-w-md">
-              A platform for real oversight.
-              <br />
-              Real accountability. Real democracy.
+            <motion.p variants={fadeUp} className="mt-5 text-base sm:text-lg text-foreground font-medium leading-relaxed max-w-lg">
+              A platform for real oversight. Real accountability. Real democracy.
             </motion.p>
 
-            <motion.p variants={fadeUp} className="mt-3 text-sm text-muted-foreground leading-relaxed max-w-md">
-              A new civic framework designed to give citizens a stronger role in how government decisions are proposed, reviewed, challenged, and held accountable.
+            <motion.p variants={fadeUp} className="mt-2 text-sm text-muted-foreground leading-relaxed max-w-lg">
+              Until the League reaches 2% support, ballot access remains locked. Join now to claim your official Founder standing and permanent place in the civic registry.
             </motion.p>
 
-            <motion.div variants={fadeUp} className="mt-8 max-w-sm">
-              <div className="p-5 bg-navy/90 border border-blueprint/40 backdrop-blur-sm">
-                <JoinForm />
+            <motion.div variants={fadeUp} className="mt-8 max-w-md">
+              <div className="p-5 sm:p-6 bg-navy/95 border border-blueprint/50 backdrop-blur-md glow-blue">
+                <JoinForm onOpenChapterOne={onOpenChapterOne} />
               </div>
             </motion.div>
           </motion.div>
 
-          {/* RIGHT — Book Cover + Atmosphere */}
+          {/* RIGHT — Book Cover + Free Chapter 1 Card */}
           <motion.div
             initial={{ opacity: 0, x: 40 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.7, delay: 0.2, ease: "easeOut" }}
-            className="relative flex justify-center lg:justify-end"
+            className="relative flex flex-col items-center lg:items-end justify-center"
           >
             {/* Atmospheric background */}
-            <div className="absolute inset-0 flex items-center justify-center">
-              {/* Radial glow */}
-              <div className="w-[500px] h-[500px] bg-[radial-gradient(ellipse_at_center,rgba(30,99,216,0.1)_0%,transparent_70%)]" />
+            <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+              <div className="w-[500px] h-[500px] bg-[radial-gradient(ellipse_at_center,rgba(30,99,216,0.15)_0%,transparent_70%)]" />
             </div>
 
-            {/* Capitol silhouette behind book */}
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 opacity-[0.06]">
-              <svg viewBox="0 0 600 400" className="w-[500px] h-auto" fill="none" stroke="#238BFF" strokeWidth="0.8">
-                <path d="M300 20C300 20 270 80 250 110C230 140 200 160 180 170L180 300L100 300L100 320L500 320L500 300L420 300L420 170C400 160 370 140 350 110C330 80 300 20 300 20Z" />
-                <circle cx="300" cy="60" r="25" />
-                <rect x="280" y="100" width="40" height="200" />
-                <line x1="180" y1="220" x2="420" y2="220" strokeWidth="0.4" />
-              </svg>
-            </div>
-
-            {/* Lightning effects */}
-            <svg className="absolute inset-0 w-full h-full lightning-flicker" viewBox="0 0 500 600">
-              <path d="M250 0 L220 120 L260 110 L200 240 L280 220 L180 380" stroke="#238BFF" strokeWidth="1.5" fill="none" opacity="0.4" />
-              <path d="M320 30 L290 150 L330 140 L270 280 L350 260 L250 420" stroke="#1E63D8" strokeWidth="0.8" fill="none" opacity="0.25" />
-              <path d="M180 50 L160 170 L200 160 L150 300 L220 280 L130 430" stroke="#38BDF8" strokeWidth="0.5" fill="none" opacity="0.2" />
-            </svg>
-
-            {/* Official IMAGINE THE FOLLOWING book cover */}
-            <div className="relative book-float z-10">
+            {/* Book Cover */}
+            <div className="relative book-float z-10 cursor-pointer" onClick={onOpenChapterOne}>
               <img
                 src="/book-cover.png"
-                alt="Imagine The Following — A Thought Experiment for the Future of Democracy by Luke Young"
+                alt="Imagine The Following by Luke Young"
                 className="w-[280px] sm:w-[320px] lg:w-[360px] h-auto drop-shadow-2xl"
-                style={{ filter: "drop-shadow(0 25px 50px rgba(0,0,0,0.6))" }}
+                style={{ filter: "drop-shadow(0 25px 50px rgba(0,0,0,0.65))" }}
               />
             </div>
+
+            {/* Quick Click-to-Read Chapter 1 Trigger Card */}
+            <motion.div
+              variants={fadeUp}
+              className="relative z-20 mt-6 w-full max-w-sm p-4 bg-navy-mid/90 border border-accent-blue/40 rounded shadow-xl"
+            >
+              <div className="flex items-start gap-3">
+                <div className="p-2.5 rounded bg-accent-blue/10 border border-accent-blue/30 text-accent-blue shrink-0">
+                  <BookOpen className="h-5 w-5" />
+                </div>
+                <div>
+                  <span className="text-[10px] font-condensed font-bold uppercase tracking-[0.2em] text-accent-blue">
+                    Free Instant Access
+                  </span>
+                  <h4 className="font-heading text-base tracking-wider text-foreground">
+                    READ CHAPTER 1 FOR FREE
+                  </h4>
+                  <p className="text-xs text-muted-foreground mt-0.5 leading-relaxed">
+                    No sign-up required. Click to read the blueprint directly in your browser.
+                  </p>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={onOpenChapterOne}
+                className="mt-3 w-full py-2.5 px-3 bg-accent-blue/20 hover:bg-accent-blue/30 border border-accent-blue/50 text-accent-blue hover:text-white text-xs font-condensed font-bold tracking-[0.14em] uppercase transition-all flex items-center justify-center gap-1.5"
+              >
+                Open Free Chapter 1 Reader
+                <ArrowRight className="h-3.5 w-3.5" />
+              </button>
+            </motion.div>
           </motion.div>
         </div>
       </div>
@@ -187,119 +186,243 @@ function HeroSection() {
 }
 
 /* ═══════════════════════════════════════════
-   SECTION 3 — MOVEMENT STRIP
+   SECTION 2 — TOP BLURB
    ═══════════════════════════════════════════ */
-function MovementStrip() {
+function TopBlurbSection({ onOpenChapterOne }: { onOpenChapterOne: () => void }) {
   return (
-    <Section className="relative py-6 border-y border-blueprint/20 bg-navy/50">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <motion.div variants={fadeUp} className="flex items-center justify-center gap-4 md:gap-8">
-          {/* Left line + icon */}
-          <div className="hidden sm:flex items-center gap-3 flex-1 justify-end">
-            <div className="w-16 h-px bg-gradient-to-r from-transparent to-blueprint/40" />
-            <CapIcon className="h-5 w-5 text-blueprint/50" />
-          </div>
-
-          {/* Text */}
-          <div className="flex items-center gap-2 md:gap-3 text-xs sm:text-sm font-condensed tracking-[0.2em] uppercase text-muted-foreground whitespace-nowrap">
-            <span>Your Voice.</span>
-            <span className="text-accent-blue font-semibold">Your Power.</span>
-            <span>Your Future.</span>
-          </div>
-
-          {/* Right line + icon */}
-          <div className="hidden sm:flex items-center gap-3 flex-1">
-            <CapIcon className="h-5 w-5 text-blueprint/50" />
-            <div className="w-16 h-px bg-gradient-to-l from-transparent to-blueprint/40" />
-          </div>
-        </motion.div>
-      </div>
-    </Section>
-  );
-}
-
-/* ═══════════════════════════════════════════
-   SECTION 4 — PROBLEM VS SOLUTION
-   ═══════════════════════════════════════════ */
-function ProblemSolutionSection() {
-  const problems = [
-    { num: "01", title: "LOBBYIST CONTROL", desc: "Special interests influence the rules of the system." },
-    { num: "02", title: "PARTISAN GAMES", desc: "Division creates gridlock and prevents real progress." },
-    { num: "03", title: "NO REAL OVERSIGHT", desc: "Citizens have limited power to challenge major decisions." },
-  ];
-  const solutions = [
-    { icon: ScaleIcon, title: "STRUCTURAL REFORM", desc: "Rebuild the system from the ground up." },
-    { icon: UsersIcon, title: "CITIZEN EMPOWERMENT", desc: "Give people a direct role in participation." },
-    { icon: EyeIcon, title: "PUBLIC OVERSIGHT", desc: "Create stronger accountability around major decisions." },
-  ];
-
-  return (
-    <Section className="relative py-20 md:py-28">
-      <div className="absolute inset-0 blueprint-grid opacity-20" />
-      {/* Capitol blueprint background */}
-      <div className="absolute inset-0 flex items-center justify-center opacity-[0.03]">
-        <svg viewBox="0 0 800 400" className="w-full max-w-5xl" fill="none" stroke="#238BFF" strokeWidth="0.6">
-          <path d="M400 30C400 30 370 90 350 120C330 150 300 170 280 180L280 320L180 320L180 340L620 340L620 320L520 320L520 180C500 170 470 150 450 120C430 90 400 30 400 30Z" />
-          <circle cx="400" cy="70" r="30" />
-          <rect x="375" y="110" width="50" height="210" />
-          <line x1="280" y1="250" x2="520" y2="250" strokeWidth="0.4" />
-          <line x1="280" y1="280" x2="520" y2="280" strokeWidth="0.4" />
-        </svg>
-      </div>
-
+    <Section className="relative py-16 md:py-24 border-y border-blueprint/30 bg-[#040810]">
+      <div className="absolute inset-0 blueprint-grid opacity-25" />
       <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <motion.div variants={fadeUp} className="grid grid-cols-1 md:grid-cols-[1fr,auto,1fr] gap-8 md:gap-6 items-start">
-          {/* THE PROBLEM */}
-          <motion.div variants={fadeUp}>
-            <h2 className="font-heading text-3xl sm:text-4xl tracking-[0.05em] text-red-accent mb-8">THE PROBLEM</h2>
-            <div className="space-y-6">
-              {problems.map((p) => (
-                <div key={p.num} className="flex gap-4">
-                  <span className="text-sm font-bold text-red-accent/60 font-condensed tracking-wider mt-0.5 shrink-0">{p.num}</span>
+        {/* Main Heading */}
+        <motion.div variants={fadeUp} className="text-center max-w-4xl mx-auto mb-12">
+          <span className="inline-block text-[11px] font-condensed font-bold tracking-[0.22em] uppercase text-accent-blue mb-3 px-3 py-1 bg-accent-blue/10 border border-accent-blue/30">
+            Civic Roadmap &amp; Membership Details
+          </span>
+          <h2 className="font-heading text-3xl sm:text-4xl md:text-5xl tracking-wide text-foreground leading-[1.05]">
+            WHAT DOES JOINING THE LEAGUE FOR REPRESENTATIVE DEMOCRACY ENTAIL EXACTLY?
+          </h2>
+          <div className="w-24 h-0.5 bg-gradient-to-r from-transparent via-accent-blue to-transparent mx-auto mt-4" />
+        </motion.div>
+
+        {/* 3 Strategic Cards (Today, Soon, 2 Percenters) */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
+          {/* 1. TODAY: THE FOUNDATION */}
+          <motion.div
+            variants={fadeUp}
+            className="p-6 sm:p-7 bg-navy/90 border border-blueprint/50 hover:border-accent-blue/50 transition-all duration-300 flex flex-col justify-between group"
+          >
+            <div>
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-2">
+                  <div className="flex items-center justify-center w-10 h-10 border border-accent-blue/30 bg-accent-blue/10 text-accent-blue group-hover:bg-accent-blue/20 transition-colors">
+                    <Users className="h-5 w-5" />
+                  </div>
                   <div>
-                    <h3 className="font-condensed text-sm font-bold tracking-[0.1em] uppercase text-foreground mb-1">{p.title}</h3>
-                    <p className="text-sm text-muted-foreground leading-relaxed">{p.desc}</p>
+                    <span className="text-[10px] font-condensed font-bold tracking-[0.18em] text-accent-blue uppercase">
+                      Stage 1
+                    </span>
+                    <h3 className="font-heading text-xl tracking-wider text-foreground">
+                      TODAY: THE FOUNDATION
+                    </h3>
                   </div>
                 </div>
-              ))}
-            </div>
-          </motion.div>
-
-          {/* VS Divider */}
-          <motion.div variants={fadeUp} className="hidden md:flex items-center justify-center self-center">
-            <div className="relative">
-              <div className="w-px h-20 bg-gradient-to-b from-transparent via-blueprint/30 to-transparent absolute left-1/2 -translate-x-1/2 -top-10" />
-              <div className="relative flex items-center justify-center w-16 h-16 rounded-full border border-blueprint/40 bg-navy-deep/80">
-                <span className="font-heading text-lg tracking-wider text-foreground">VS.</span>
               </div>
-              <div className="w-px h-20 bg-gradient-to-b from-transparent via-blueprint/30 to-transparent absolute left-1/2 -translate-x-1/2 bottom-10" />
+
+              <div className="p-3 bg-navy-mid/60 border-l-2 border-accent-blue text-xs sm:text-sm text-foreground font-medium mb-4 leading-relaxed">
+                "It’s about building support for Representative Democracy via number of supporters. Many hands make light work."
+              </div>
+
+              <p className="text-xs text-muted-foreground leading-relaxed">
+                Before legislation can be challenged or platforms ratified, genuine power begins with pure human count. Every citizen who steps forward strengthens the civic baseline required to hold entrenched power accountable.
+              </p>
+            </div>
+
+            <div className="mt-6 pt-4 border-t border-blueprint/20 flex items-center justify-between text-[11px] font-condensed uppercase tracking-wider text-accent-blue">
+              <span>Status: Active Registration</span>
+              <ChevronRight className="h-4 w-4" />
             </div>
           </motion.div>
 
-          {/* Mobile VS */}
-          <motion.div variants={fadeUp} className="md:hidden flex justify-center">
-            <div className="flex items-center justify-center w-14 h-14 rounded-full border border-blueprint/40 bg-navy-deep/80">
-              <span className="font-heading text-base tracking-wider text-foreground">VS.</span>
-            </div>
-          </motion.div>
-
-          {/* THE SOLUTION */}
-          <motion.div variants={fadeUp}>
-            <h2 className="font-heading text-3xl sm:text-4xl tracking-[0.05em] text-accent-blue mb-8">THE SOLUTION</h2>
-            <div className="space-y-6">
-              {solutions.map((s) => (
-                <div key={s.title} className="flex gap-4">
-                  <div className="shrink-0 mt-0.5">
-                    <s.icon className="h-5 w-5 text-accent-blue" />
+          {/* 2. SOON: INAUGURAL CONVENTION & PLATFORM */}
+          <motion.div
+            variants={fadeUp}
+            className="p-6 sm:p-7 bg-navy/90 border border-blueprint/50 hover:border-accent-blue/50 transition-all duration-300 flex flex-col justify-between group"
+          >
+            <div>
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-2">
+                  <div className="flex items-center justify-center w-10 h-10 border border-cyan-glow/30 bg-cyan-glow/10 text-cyan-glow group-hover:bg-cyan-glow/20 transition-colors">
+                    <Vote className="h-5 w-5" />
                   </div>
                   <div>
-                    <h3 className="font-condensed text-sm font-bold tracking-[0.1em] uppercase text-foreground mb-1">{s.title}</h3>
-                    <p className="text-sm text-muted-foreground leading-relaxed">{s.desc}</p>
+                    <span className="text-[10px] font-condensed font-bold tracking-[0.18em] text-cyan-glow uppercase">
+                      Stage 2
+                    </span>
+                    <h3 className="font-heading text-xl tracking-wider text-foreground">
+                      SOON: THE CONVENTION
+                    </h3>
                   </div>
                 </div>
-              ))}
+              </div>
+
+              <p className="text-xs text-muted-foreground leading-relaxed space-y-2">
+                Once there are enough supporters to have an inaugural convention, all members can get together to debate and vote in a more comprehensive platform to accurately reflect the will of its members.
+              </p>
+
+              <div className="my-3 p-3 bg-navy-mid/60 border border-blueprint/30 text-xs text-muted-foreground leading-relaxed">
+                <strong className="text-foreground">The PIQ App:</strong> By the time of convention the goal is to have an operational PIQ app for all members to use easily and often as desired.
+              </div>
+
+              <p className="text-xs text-muted-foreground leading-relaxed">
+                Should a platform be ratified, there will likely be a call to form an official political party. Anyone who wishes can officially join it in that capacity. Not officially joining the party has no effect on League membership—it will, however, likely affect the League’s chances of success one way or another.
+              </p>
+            </div>
+
+            <div className="mt-6 pt-4 border-t border-blueprint/20 flex items-center justify-between text-[11px] font-condensed uppercase tracking-wider text-cyan-glow">
+              <span>Goal: Ratified Platform &amp; PIQ App</span>
+              <ChevronRight className="h-4 w-4" />
             </div>
           </motion.div>
+
+          {/* 3. 2 PERCENTERS: THE FOUNDERS */}
+          <motion.div
+            variants={fadeUp}
+            className="p-6 sm:p-7 bg-navy/90 border border-amber-400/40 hover:border-amber-400/70 transition-all duration-300 flex flex-col justify-between group relative overflow-hidden"
+          >
+            <div className="absolute -top-10 -right-10 w-28 h-28 bg-amber-500/10 rounded-full blur-xl pointer-events-none" />
+
+            <div>
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-2">
+                  <div className="flex items-center justify-center w-10 h-10 border border-amber-400/40 bg-amber-500/10 text-amber-400 group-hover:bg-amber-500/20 transition-colors">
+                    <Award className="h-5 w-5" />
+                  </div>
+                  <div>
+                    <span className="text-[10px] font-condensed font-bold tracking-[0.18em] text-amber-300 uppercase">
+                      Official Standing
+                    </span>
+                    <h3 className="font-heading text-xl tracking-wider text-foreground">
+                      2 PERCENTERS: FOUNDERS
+                    </h3>
+                  </div>
+                </div>
+              </div>
+
+              <p className="text-xs text-muted-foreground leading-relaxed mb-3">
+                Until the League reaches 2 Percent support amongst voters it will be hard to make ballots. Therefore, everyone who gets the League to 2 percent will be considered a Founder.
+              </p>
+
+              <div className="p-3 bg-navy-mid/70 border border-amber-400/20 rounded text-xs space-y-1.5 text-muted-foreground">
+                <p>
+                  <strong className="text-foreground">Optional Contact Info:</strong> When joining, contact info is not required. To prove real people and receive a monthly news at most, better communication can only help. If you want to stay in the loop, you know where the website is.
+                </p>
+                <p className="text-amber-200/90 font-medium">
+                  <PhoneCall className="inline h-3 w-3 mr-1" />
+                  There is also an option for anyone who would like a welcome phone call from Luke personally (book author, not website designer)!
+                </p>
+              </div>
+
+              <blockquote className="mt-3 text-[11px] italic text-muted-foreground/90 pl-2 border-l border-amber-400/40">
+                "Hopefully I’m grossly underestimating what a crazy commitment this is to make but you just read a near 300 page book on government policy then came to the website, then joined!?! It’s the least I can do. Truly."
+              </blockquote>
+            </div>
+
+            <div className="mt-6 pt-4 border-t border-amber-400/20 flex items-center justify-between text-[11px] font-condensed uppercase tracking-wider text-amber-300">
+              <span>Founder Status Active</span>
+              <Award className="h-4 w-4" />
+            </div>
+          </motion.div>
+        </div>
+      </div>
+    </Section>
+  );
+}
+
+/* ═══════════════════════════════════════════
+   SECTION 3 — FREE CHAPTER 1 READER FEATURE
+   ═══════════════════════════════════════════ */
+function FreeChapterOneSection({ onOpenChapterOne }: { onOpenChapterOne: () => void }) {
+  return (
+    <Section className="relative py-20 md:py-28 overflow-hidden bg-navy-deep">
+      <div className="absolute inset-0 blueprint-grid opacity-20" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(35,139,255,0.08)_0%,transparent_70%)]" />
+
+      <div className="relative z-10 mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
+        {/* Exact User Header */}
+        <motion.div variants={fadeUp} className="text-center mb-10">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-accent-blue/10 border border-accent-blue/30 text-accent-blue text-[11px] font-condensed font-bold tracking-[0.2em] uppercase mb-4">
+            <BookOpen className="h-3.5 w-3.5" />
+            Free Access • Zero Sign-Up Required
+          </div>
+
+          <h2 className="font-heading text-2xl sm:text-3xl md:text-4xl lg:text-5xl tracking-wide text-foreground leading-tight max-w-4xl mx-auto">
+            WHY GIVE THIS AWAY? BECAUSE IT COULD HELP. BUT ONLY IF PEOPLE GET A CHANCE TO SEE IT WHETHER THEY HAVE MONEY TO SPEND ON A BOOK OR NOT.
+          </h2>
+
+          <p className="mt-4 text-sm sm:text-base text-accent-blue font-condensed tracking-wider uppercase font-medium max-w-2xl mx-auto">
+            "I’d rather let people read than microdose. All the trying to bullet point ideas isn’t necessary farther down the page."
+          </p>
+        </motion.div>
+
+        {/* Reader Trigger Showcase Box */}
+        <motion.div
+          variants={fadeUp}
+          className="p-6 sm:p-10 bg-navy/90 border border-electric/40 rounded-lg shadow-2xl relative overflow-hidden"
+        >
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
+            {/* Left: Book Cover preview */}
+            <div className="md:col-span-4 flex justify-center">
+              <div className="relative group cursor-pointer" onClick={onOpenChapterOne}>
+                <img
+                  src="/book-cover.png"
+                  alt="Imagine The Following"
+                  className="w-48 sm:w-56 h-auto drop-shadow-2xl transition-transform duration-300 group-hover:scale-105"
+                />
+                <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 bg-black/40 transition-opacity">
+                  <span className="px-3 py-1.5 bg-accent-blue text-white text-xs font-condensed font-bold uppercase tracking-widest shadow-lg">
+                    Click To Read
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            {/* Right: Excerpt & One-Click Reader Button */}
+            <div className="md:col-span-8 space-y-4">
+              <span className="text-[11px] font-condensed font-bold uppercase tracking-[0.2em] text-accent-blue">
+                Imagine The Following: A Thought Experiment for the Future of Democracy
+              </span>
+
+              <h3 className="font-heading text-2xl sm:text-3xl text-foreground tracking-wide">
+                CHAPTER 1: THE FOUNDATION &amp; CIVIC SOVEREIGNTY
+              </h3>
+
+              <p className="text-sm text-muted-foreground leading-relaxed italic border-l-2 border-accent-blue/50 pl-3">
+                "Imagine waking up in a country where elected representation is not an abstract slogan printed on bumper stickers once every four years, but an active, functioning reality..."
+              </p>
+
+              <p className="text-xs text-muted-foreground/90 leading-relaxed">
+                No sign-up. No credit card. Just click below to read the complete first chapter directly in a clean, distraction-free reader with customizable typography.
+              </p>
+
+              <div className="pt-3 flex flex-wrap items-center gap-3">
+                <button
+                  type="button"
+                  onClick={onOpenChapterOne}
+                  className="px-6 py-3.5 bg-gradient-to-r from-electric to-accent-blue hover:from-accent-blue hover:to-electric text-white text-xs font-bold tracking-[0.14em] uppercase transition-all shadow-[0_0_25px_rgba(35,139,255,0.35)] flex items-center gap-2 cursor-pointer"
+                >
+                  <BookOpen className="h-4 w-4" />
+                  Read Chapter 1 Free Now
+                </button>
+
+                <Link
+                  to="/book"
+                  className="px-5 py-3 border border-blueprint/60 text-foreground hover:text-white hover:bg-white/5 text-xs font-semibold tracking-[0.12em] uppercase transition-colors"
+                >
+                  Explore Hardcover Details
+                </Link>
+              </div>
+            </div>
+          </div>
         </motion.div>
       </div>
     </Section>
@@ -307,27 +430,32 @@ function ProblemSolutionSection() {
 }
 
 /* ═══════════════════════════════════════════
-   SECTION 5 — 4-STEP FRAMEWORK
+   SECTION 4 — 4-STEP FRAMEWORK
    ═══════════════════════════════════════════ */
 function FrameworkSection() {
   const steps = [
-    { num: "01", title: "PROPOSE", desc: "Citizen ideas and proposals enter the system.", Icon: BoltIcon },
-    { num: "02", title: "REVIEW", desc: "Transparent review focused on public impact.", Icon: EyeIcon },
-    { num: "03", title: "VETO", desc: "Mechanisms designed to prevent corruption and abuse.", Icon: ShieldIcon },
-    { num: "04", title: "PUBLIC OVERSIGHT", desc: "Citizens maintain visibility and accountability.", Icon: UsersGroupIcon },
+    { num: "01", title: "PROPOSE", desc: "Citizen ideas and proposals enter the system directly without gatekeepers.", Icon: BoltIcon },
+    { num: "02", title: "REVIEW", desc: "Transparent review focused on measurable public benefit and constitutionality.", Icon: EyeIcon },
+    { num: "03", title: "VETO", desc: "Structured oversight designed to prevent special-interest distortion.", Icon: ShieldIcon },
+    { num: "04", title: "PUBLIC OVERSIGHT", desc: "Citizens maintain permanent visibility and democratic accountability.", Icon: UsersGroupIcon },
   ];
 
   return (
     <Section className="relative py-20 md:py-28">
-      <div className="absolute inset-0 blueprint-grid-dense opacity-30" />
+      <div className="absolute inset-0 blueprint-grid-dense opacity-20" />
       <div className="absolute inset-0 bg-gradient-to-b from-background via-transparent to-background" />
 
       <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <motion.div variants={fadeUp} className="text-center mb-14">
-          <h2 className="font-heading text-3xl sm:text-4xl md:text-5xl tracking-[0.05em] text-foreground">OUR 4-STEP FRAMEWORK</h2>
+          <span className="text-[11px] font-condensed font-bold tracking-[0.2em] uppercase text-accent-blue mb-2 block">
+            System Architecture
+          </span>
+          <h2 className="font-heading text-3xl sm:text-4xl md:text-5xl tracking-[0.05em] text-foreground">
+            OUR 4-STEP CIVIC FRAMEWORK
+          </h2>
         </motion.div>
 
-        {/* Desktop: Horizontal */}
+        {/* Horizontal on Desktop, Vertical on Mobile */}
         <motion.div variants={fadeUp} className="hidden md:flex items-start justify-center gap-0">
           {steps.map((step, i) => (
             <div key={step.num} className="flex items-center">
@@ -377,57 +505,32 @@ function FrameworkSection() {
 }
 
 /* ═══════════════════════════════════════════
-   SECTION 6 — HOW THE LEAGUE WORKS
+   SECTION 5 — HOW THE LEAGUE WORKS
    ═══════════════════════════════════════════ */
 function LeagueWorksSection() {
-  const nodes = [
-    { label: "PROPOSE", x: "50%", y: "8%", Icon: BoltIcon },
-    { label: "REVIEW", x: "85%", y: "45%", Icon: EyeIcon },
-    { label: "PUBLIC OVERSIGHT", x: "50%", y: "88%", Icon: UsersGroupIcon },
-    { label: "VETO", x: "15%", y: "45%", Icon: ShieldIcon },
-  ];
-
   return (
-    <Section className="relative py-20 md:py-28 overflow-hidden">
-      <div className="absolute inset-0 blueprint-grid opacity-25" />
-      {/* Capitol silhouettes on sides */}
-      <div className="absolute left-0 bottom-0 opacity-[0.03]">
-        <svg viewBox="0 0 300 300" className="w-64" fill="none" stroke="#238BFF" strokeWidth="0.6">
-          <path d="M150 10C150 10 130 50 120 70C110 90 95 100 85 105L85 220L40 220L40 235L260 235L260 220L215 220L215 105C205 100 190 90 180 70C170 50 150 10 150 10Z" />
-          <circle cx="150" cy="35" r="15" />
-        </svg>
-      </div>
-      <div className="absolute right-0 bottom-0 opacity-[0.03] scale-x-[-1]">
-        <svg viewBox="0 0 300 300" className="w-64" fill="none" stroke="#238BFF" strokeWidth="0.6">
-          <path d="M150 10C150 10 130 50 120 70C110 90 95 100 85 105L85 220L40 220L40 235L260 235L260 220L215 220L215 105C205 100 190 90 180 70C170 50 150 10 150 10Z" />
-          <circle cx="150" cy="35" r="15" />
-        </svg>
-      </div>
-
+    <Section className="relative py-20 md:py-28 overflow-hidden bg-[#050A10]">
+      <div className="absolute inset-0 blueprint-grid opacity-20" />
       <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <motion.div variants={fadeUp} className="text-center mb-14">
-          <h2 className="font-heading text-3xl sm:text-4xl md:text-5xl tracking-[0.05em] text-foreground">HOW THE LEAGUE WORKS</h2>
+          <span className="text-[11px] font-condensed font-bold tracking-[0.2em] uppercase text-accent-blue mb-2 block">
+            Operational Model
+          </span>
+          <h2 className="font-heading text-3xl sm:text-4xl md:text-5xl tracking-[0.05em] text-foreground">
+            HOW THE LEAGUE WORKS
+          </h2>
         </motion.div>
 
         <motion.div variants={fadeUp} className="relative max-w-xl mx-auto">
           {/* SVG connecting arrows */}
           <svg className="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 400 400">
-            {/* Top to Right */}
             <path d="M220 70 Q320 70 330 170" stroke="#1E63D8" strokeWidth="1" fill="none" strokeDasharray="4 4" className="animate-dash" />
-            {/* Right to Bottom */}
             <path d="M330 230 Q320 330 220 330" stroke="#1E63D8" strokeWidth="1" fill="none" strokeDasharray="4 4" className="animate-dash" />
-            {/* Bottom to Left */}
             <path d="M180 330 Q80 330 70 230" stroke="#1E63D8" strokeWidth="1" fill="none" strokeDasharray="4 4" className="animate-dash" />
-            {/* Left to Top */}
             <path d="M70 170 Q80 70 180 70" stroke="#1E63D8" strokeWidth="1" fill="none" strokeDasharray="4 4" className="animate-dash" />
-            {/* Inner connections to center */}
-            <line x1="200" y1="100" x2="200" y2="160" stroke="#238BFF" strokeWidth="0.5" opacity="0.4" />
-            <line x1="300" y1="200" x2="240" y2="200" stroke="#238BFF" strokeWidth="0.5" opacity="0.4" />
-            <line x1="200" y1="300" x2="200" y2="240" stroke="#238BFF" strokeWidth="0.5" opacity="0.4" />
-            <line x1="100" y1="200" x2="160" y2="200" stroke="#238BFF" strokeWidth="0.5" opacity="0.4" />
           </svg>
 
-          <div className="relative h-[400px]">
+          <div className="relative h-[380px]">
             {/* PROPOSE — Top */}
             <div className="absolute top-0 left-1/2 -translate-x-1/2 flex flex-col items-center">
               <div className="flex items-center justify-center w-14 h-14 rounded-full border border-electric/30 bg-electric/5 pulse-glow mb-2">
@@ -475,68 +578,19 @@ function LeagueWorksSection() {
 }
 
 /* ═══════════════════════════════════════════
-   SECTION 7 — MOVEMENT BUILT FOR PARTICIPATION
+   SECTION 6 — BOOK PROMOTION
    ═══════════════════════════════════════════ */
-function ParticipationSection() {
-  const items = [
-    { num: "01", title: "PARTICIPATE", desc: "Take part in public oversight discussions.", Icon: UsersIcon },
-    { num: "02", title: "CONTRIBUTE", desc: "Help shape conversations around reform.", Icon: BoltIcon },
-    { num: "03", title: "STAY INFORMED", desc: "Receive movement updates and action opportunities.", Icon: EyeIcon },
-    { num: "04", title: "HOLD POWER ACCOUNTABLE", desc: "Support stronger transparency and public responsibility.", Icon: ScaleIcon },
-  ];
-
-  return (
-    <Section className="relative py-20 md:py-28">
-      <div className="absolute inset-0 blueprint-grid opacity-20" />
-      <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 lg:grid-cols-[1fr_1.5fr] gap-10 lg:gap-16 items-start">
-          {/* Left heading */}
-          <motion.div variants={fadeUp}>
-            <h2 className="font-heading text-4xl sm:text-5xl md:text-6xl tracking-[0.03em] text-foreground leading-[0.9]">
-              A MOVEMENT BUILT
-              <br />
-              FOR PARTICIPATION.
-            </h2>
-            <p className="mt-5 text-sm text-muted-foreground leading-relaxed max-w-sm">
-              The League is designed for citizens who believe accountability should not end at the ballot box.
-            </p>
-          </motion.div>
-
-          {/* Right cards */}
-          <motion.div variants={fadeUp} className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {items.map((item) => (
-              <div key={item.num} className="p-5 border border-border bg-navy-mid/50 hover:border-electric/20 hover:bg-navy-mid/80 transition-all duration-200 group">
-                <div className="flex items-center gap-3 mb-3">
-                  <div className="flex items-center justify-center w-8 h-8 border border-electric/20 bg-electric/5 text-accent-blue group-hover:bg-electric/10 transition-colors">
-                    <item.Icon className="h-4 w-4" />
-                  </div>
-                  <span className="text-[10px] font-bold tracking-[0.15em] text-electric/60">{item.num}</span>
-                </div>
-                <h3 className="font-condensed text-sm font-bold tracking-[0.1em] uppercase text-foreground mb-1">{item.title}</h3>
-                <p className="text-xs text-muted-foreground leading-relaxed">{item.desc}</p>
-              </div>
-            ))}
-          </motion.div>
-        </div>
-      </div>
-    </Section>
-  );
-}
-
-/* ═══════════════════════════════════════════
-   SECTION 8 — BOOK PROMOTION
-   ═══════════════════════════════════════════ */
-function BookPromoSection() {
+function BookPromoSection({ onOpenChapterOne }: { onOpenChapterOne: () => void }) {
   const highlights = [
     "First Edition Hardcover",
-    "Blueprint-inspired framework",
-    "Civic participation principles",
-    "Structural reform concepts",
+    "Complete blueprint-inspired civic framework",
+    "Direct participation & qualification principles",
+    "The 2% threshold roadmap to ballot access",
     "A thought experiment for the future of democracy",
   ];
 
   return (
-    <Section className="relative py-20 md:py-28">
+    <Section className="relative py-20 md:py-28 border-t border-blueprint/20">
       <div className="absolute inset-0 bg-navy/40" />
       <div className="absolute inset-0 blueprint-grid opacity-15" />
 
@@ -554,7 +608,9 @@ function BookPromoSection() {
 
           {/* Right — Details */}
           <motion.div variants={fadeUp}>
-            <span className="inline-block text-[11px] font-medium tracking-[0.2em] uppercase text-accent-blue mb-3">The Book</span>
+            <span className="inline-block text-[11px] font-medium tracking-[0.2em] uppercase text-accent-blue mb-3">
+              The Book
+            </span>
             <h2 className="font-heading text-4xl sm:text-5xl md:text-6xl tracking-[0.03em] text-foreground leading-[0.9] mb-4">
               THE FULL PLAN
               <br />
@@ -574,18 +630,20 @@ function BookPromoSection() {
             </div>
 
             <div className="flex flex-wrap items-center gap-3">
-              <Link
-                to="/join"
-                className="inline-flex items-center gap-2 px-7 py-3 bg-gradient-to-r from-electric to-accent-blue text-white text-xs font-bold tracking-[0.12em] uppercase transition-all hover:shadow-[0_0_25px_rgba(35,139,255,0.3)]"
+              <button
+                type="button"
+                onClick={onOpenChapterOne}
+                className="inline-flex items-center gap-2 px-7 py-3 bg-gradient-to-r from-electric to-accent-blue text-white text-xs font-bold tracking-[0.12em] uppercase transition-all hover:shadow-[0_0_25px_rgba(35,139,255,0.3)] cursor-pointer"
               >
-                Order Your Copy
-                <ArrowRight className="h-4 w-4" />
-              </Link>
+                <BookOpen className="h-4 w-4" />
+                Read Chapter 1 Free
+              </button>
               <Link
                 to="/book"
                 className="inline-flex items-center gap-2 px-7 py-3 border border-electric/30 text-foreground text-xs font-semibold tracking-[0.12em] uppercase hover:border-accent-blue/50 hover:bg-electric/5 transition-all"
               >
-                Explore The Book
+                Order Hardcover
+                <ArrowRight className="h-4 w-4" />
               </Link>
             </div>
           </motion.div>
@@ -596,25 +654,16 @@ function BookPromoSection() {
 }
 
 /* ═══════════════════════════════════════════
-   SECTION 9 — MOVEMENT QUOTE
+   SECTION 7 — MOVEMENT QUOTE
    ═══════════════════════════════════════════ */
 function QuoteSection() {
   return (
-    <Section className="relative py-20 md:py-28 overflow-hidden">
+    <Section className="relative py-20 md:py-28 overflow-hidden bg-[#040810]">
       <div className="absolute inset-0 blueprint-grid opacity-15" />
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(30,99,216,0.05)_0%,transparent_70%)]" />
 
-      {/* Capitol silhouette */}
-      <div className="absolute inset-0 flex items-center justify-center opacity-[0.04]">
-        <svg viewBox="0 0 600 300" className="w-full max-w-4xl" fill="none" stroke="#238BFF" strokeWidth="0.6">
-          <path d="M300 20C300 20 275 60 260 80C245 100 225 112 210 118L210 240L140 240L140 255L460 255L460 240L390 240L390 118C375 112 355 100 340 80C325 60 300 20 300 20Z" />
-          <circle cx="300" cy="50" r="20" />
-        </svg>
-      </div>
-
       <div className="relative z-10 mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 text-center">
         <motion.div variants={fadeUp}>
-          {/* Quote marks */}
           <span className="font-heading text-6xl text-electric/30 leading-none">"</span>
           <h2 className="font-heading text-3xl sm:text-4xl md:text-5xl lg:text-6xl tracking-[0.04em] text-foreground leading-[1.05] mt-2 mb-2">
             DEMOCRACY WORKS BEST
@@ -631,89 +680,13 @@ function QuoteSection() {
 }
 
 /* ═══════════════════════════════════════════
-   SECTION 10 — FROM IDEAS TO ACTION
-   ═══════════════════════════════════════════ */
-function ActionSection() {
-  const cards = [
-    { title: "PUBLIC ACCOUNTABILITY", desc: "Help shape the conversation around transparency and oversight.", btn: "GET INVOLVED", href: "/join" },
-    { title: "STRUCTURAL REFORM", desc: "Support new ideas designed to improve the system.", btn: "EXPLORE SYSTEM", href: "/platform" },
-    { title: "CITIZEN EMPOWERMENT", desc: "Join discussions focused on meaningful public participation.", btn: "JOIN THE CONVERSATION", href: "/join" },
-  ];
-
-  return (
-    <Section className="relative py-20 md:py-28">
-      <div className="absolute inset-0 blueprint-grid opacity-20" />
-      <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 lg:grid-cols-[1fr_2fr] gap-10 lg:gap-16 items-start">
-          {/* Left heading */}
-          <motion.div variants={fadeUp}>
-            <h2 className="font-heading text-4xl sm:text-5xl md:text-6xl tracking-[0.03em] text-foreground leading-[0.9]">
-              FROM IDEAS
-              <br />
-              TO ACTION.
-            </h2>
-            <p className="mt-5 text-sm text-muted-foreground leading-relaxed max-w-sm">
-              Real change happens when citizens step forward.
-            </p>
-          </motion.div>
-
-          {/* Right cards */}
-          <motion.div variants={fadeUp} className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            {cards.map((c) => (
-              <div key={c.title} className="p-5 border border-border bg-navy-mid/50 hover:border-electric/20 transition-all duration-200 flex flex-col">
-                <h3 className="font-condensed text-sm font-bold tracking-[0.1em] uppercase text-foreground mb-2">{c.title}</h3>
-                <p className="text-xs text-muted-foreground leading-relaxed flex-1 mb-4">{c.desc}</p>
-                <Link
-                  to={c.href}
-                  className="inline-flex items-center justify-center px-4 py-2 border border-electric/30 text-[11px] font-semibold tracking-[0.1em] uppercase text-foreground hover:border-accent-blue/50 hover:bg-electric/5 transition-all"
-                >
-                  {c.btn}
-                </Link>
-              </div>
-            ))}
-          </motion.div>
-        </div>
-      </div>
-    </Section>
-  );
-}
-
-/* ═══════════════════════════════════════════
-   SECTION 11 — FINAL CTA
+   SECTION 8 — FINAL CTA
    ═══════════════════════════════════════════ */
 function FinalCTASection() {
   return (
-    <Section className="relative py-24 md:py-32 overflow-hidden">
-      {/* Background layers */}
+    <Section className="relative py-24 md:py-32 overflow-hidden border-t border-blueprint/30">
       <div className="absolute inset-0 bg-gradient-to-b from-navy-deep via-navy to-navy-deep" />
       <div className="absolute inset-0 blueprint-grid opacity-15" />
-
-      {/* Capitol silhouette */}
-      <div className="absolute inset-0 flex items-end justify-center opacity-[0.05]">
-        <svg viewBox="0 0 800 300" className="w-full max-w-5xl" fill="none" stroke="#238BFF" strokeWidth="0.6">
-          <path d="M400 20C400 20 375 70 360 95C345 120 320 135 300 142L300 250L200 250L200 268L600 268L600 250L500 250L500 142C480 135 455 120 440 95C425 70 400 20 400 20Z" />
-          <circle cx="400" cy="55" r="22" />
-          <rect x="382" y="85" width="36" height="165" />
-        </svg>
-      </div>
-
-      {/* Lightning */}
-      <svg className="absolute inset-0 w-full h-full lightning-flicker" viewBox="0 0 1200 500">
-        <path d="M600 0 L570 80 L610 70 L550 160 L630 145 L520 280" stroke="#238BFF" strokeWidth="1" fill="none" opacity="0.2" />
-        <path d="M700 20 L680 100 L720 90 L660 180 L740 165 L640 300" stroke="#1E63D8" strokeWidth="0.5" fill="none" opacity="0.12" />
-      </svg>
-
-      {/* Crowd silhouette */}
-      <div className="absolute bottom-0 left-0 right-0 opacity-[0.06]">
-        <svg viewBox="0 0 1200 100" className="w-full" fill="#238BFF">
-          {Array.from({ length: 60 }).map((_, i) => (
-            <circle key={i} cx={20 + i * 20} cy={60 + Math.sin(i * 0.7) * 15} r={4 + Math.sin(i * 1.2) * 2} />
-          ))}
-          {Array.from({ length: 30 }).map((_, i) => (
-            <rect key={`f${i}`} x={60 + i * 40} y={20 + Math.sin(i * 0.9) * 10} width="2" height={18 + Math.sin(i * 1.1) * 5} rx="1" transform={`rotate(${-5 + Math.sin(i) * 10} ${61 + i * 40} ${20 + Math.sin(i * 0.9) * 10})`} />
-          ))}
-        </svg>
-      </div>
 
       <div className="relative z-10 mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 text-center">
         <motion.div variants={fadeUp}>
@@ -726,13 +699,13 @@ function FinalCTASection() {
             IT&apos;S SOMETHING WE BUILD TOGETHER.
           </p>
           <p className="text-sm text-muted-foreground max-w-lg mx-auto mb-8 leading-relaxed">
-            Be part of a movement focused on accountability, participation, and structural reform.
+            Every citizen who joins up to the 2% threshold receives official Founder status and permanent representation in the movement.
           </p>
           <Link
             to="/join"
             className="inline-flex items-center gap-2 px-10 py-4 bg-gradient-to-r from-electric to-accent-blue text-white text-xs font-bold tracking-[0.14em] uppercase transition-all hover:shadow-[0_0_30px_rgba(35,139,255,0.35)]"
           >
-            Join The League
+            Join The League &amp; Claim Founder Number
             <ArrowRight className="h-4 w-4" />
           </Link>
         </motion.div>
@@ -745,22 +718,28 @@ function FinalCTASection() {
    EXPORT — COMPLETE HOMEPAGE
    ═══════════════════════════════════════════ */
 export default function Landing() {
+  const [readerOpen, setReaderOpen] = useState(false);
+
   return (
     <div className="min-h-screen bg-background text-foreground">
       <Header />
       <main>
-        <HeroSection />
-        <MovementStrip />
-        <ProblemSolutionSection />
+        <HeroSection onOpenChapterOne={() => setReaderOpen(true)} />
+        <TopBlurbSection onOpenChapterOne={() => setReaderOpen(true)} />
+        <FreeChapterOneSection onOpenChapterOne={() => setReaderOpen(true)} />
         <FrameworkSection />
         <LeagueWorksSection />
-        <ParticipationSection />
-        <BookPromoSection />
+        <BookPromoSection onOpenChapterOne={() => setReaderOpen(true)} />
         <QuoteSection />
-        <ActionSection />
         <FinalCTASection />
       </main>
       <Footer />
+
+      {/* Free Chapter 1 Reader Modal */}
+      <ChapterOneReader
+        isOpen={readerOpen}
+        onClose={() => setReaderOpen(false)}
+      />
     </div>
   );
 }
