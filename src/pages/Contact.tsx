@@ -27,10 +27,10 @@ function HeroSection() {
         <line x1="66%" y1="0" x2="66%" y2="100%" stroke="#164A7B" strokeWidth="0.5" />
       </svg>
 
-      <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center pt-24">
+      <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center pt-28 sm:pt-32">
         <motion.div initial="hidden" animate="visible" variants={stagger}>
-          <motion.h1 variants={fadeUp} className="font-heading text-6xl sm:text-7xl md:text-8xl tracking-wide leading-[0.9] text-foreground glow-text">
-            CONTACT & PRESS
+          <motion.h1 variants={fadeUp} className="font-heading text-5xl sm:text-7xl md:text-8xl tracking-wide leading-[0.9] text-foreground glow-text">
+            CONTACT &amp; PRESS
           </motion.h1>
           <motion.p variants={fadeUp} className="mt-6 text-lg text-muted-foreground font-light max-w-lg mx-auto">
             To build the future, we need serious conversations.

@@ -28,7 +28,7 @@ function HeroSection({ onOpenChapterOne }: { onOpenChapterOne: () => void }) {
         <line x1="0" y1="75%" x2="100%" y2="75%" stroke="#164A7B" strokeWidth="0.5" />
       </svg>
 
-      <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-24">
+      <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-28 sm:pt-32">
         <motion.div
           initial="hidden"
           animate="visible"

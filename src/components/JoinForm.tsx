@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Shield, PhoneCall, Sparkles, HelpCircle, CheckCircle } from "lucide-react";
+import { Shield, PhoneCall, Sparkles, HelpCircle } from "lucide-react";
 import { registerNewMember, MemberJoinData } from "@/lib/leagueStore";
 import WelcomeScreenModal from "@/components/WelcomeScreenModal";
 
@@ -56,13 +56,13 @@ export default function JoinForm({ compact = false, onSuccess, onOpenChapterOne 
 
   return (
     <>
-      <form onSubmit={handleSubmit} className="space-y-3.5 text-left">
+      <form onSubmit={handleSubmit} className="space-y-3 sm:space-y-3.5 text-left w-full">
         {!compact && (
-          <div className="mb-4">
+          <div className="mb-3 sm:mb-4">
             <div className="flex items-center justify-between">
               <span className="text-[10px] font-condensed font-bold tracking-[0.2em] uppercase text-accent-blue flex items-center gap-1.5">
-                <Sparkles className="h-3.5 w-3.5 text-cyan-glow" />
-                Become A 2% Founder
+                <Sparkles className="h-3.5 w-3.5 text-cyan-glow shrink-0" />
+                <span>Become A 2% Founder</span>
               </span>
               <span className="text-[10px] text-muted-foreground font-condensed uppercase tracking-wider">
                 Instant Registration
@@ -77,7 +77,7 @@ export default function JoinForm({ compact = false, onSuccess, onOpenChapterOne 
           </div>
         )}
 
-        {/* Name (Can be full name or alias) */}
+        {/* Name */}
         <div>
           <label className="block text-[11px] font-condensed uppercase tracking-wider text-muted-foreground mb-1">
             Your Name / Supporter Alias <span className="text-muted-foreground/60">(Optional)</span>
@@ -86,7 +86,7 @@ export default function JoinForm({ compact = false, onSuccess, onOpenChapterOne 
             type="text"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            className="w-full px-3.5 py-2 bg-[#091523] text-foreground text-sm border border-blueprint/50 placeholder:text-muted-foreground/50 focus:outline-none focus:ring-1 focus:ring-accent-blue focus:border-accent-blue transition-colors rounded-none"
+            className="w-full px-3 py-2.5 bg-[#091523] text-foreground text-base sm:text-sm border border-blueprint/50 placeholder:text-muted-foreground/50 focus:outline-none focus:ring-1 focus:ring-accent-blue focus:border-accent-blue transition-colors rounded-none"
             placeholder="e.g. Eleanor Vance (or leave blank)"
           />
         </div>
@@ -102,7 +102,7 @@ export default function JoinForm({ compact = false, onSuccess, onOpenChapterOne 
               value={district}
               onChange={(e) => setDistrict(e.target.value)}
               required
-              className="w-full px-3.5 py-2 bg-[#091523] text-foreground text-sm border border-blueprint/50 placeholder:text-muted-foreground/50 focus:outline-none focus:ring-1 focus:ring-accent-blue focus:border-accent-blue transition-colors rounded-none"
+              className="w-full px-3 py-2.5 bg-[#091523] text-foreground text-base sm:text-sm border border-blueprint/50 placeholder:text-muted-foreground/50 focus:outline-none focus:ring-1 focus:ring-accent-blue focus:border-accent-blue transition-colors rounded-none"
               placeholder="e.g. District 7 or 43215"
             />
           </div>
@@ -114,7 +114,7 @@ export default function JoinForm({ compact = false, onSuccess, onOpenChapterOne 
             <select
               value={state}
               onChange={(e) => setState(e.target.value)}
-              className="w-full px-3 py-2 bg-[#091523] text-foreground text-sm border border-blueprint/50 focus:outline-none focus:ring-1 focus:ring-accent-blue focus:border-accent-blue transition-colors rounded-none"
+              className="w-full px-3 py-2.5 bg-[#091523] text-foreground text-base sm:text-sm border border-blueprint/50 focus:outline-none focus:ring-1 focus:ring-accent-blue focus:border-accent-blue transition-colors rounded-none"
             >
               {US_STATES.map((st) => (
                 <option key={st} value={st} className="bg-navy-deep text-foreground">
@@ -134,7 +134,7 @@ export default function JoinForm({ compact = false, onSuccess, onOpenChapterOne 
             type="text"
             value={country}
             onChange={(e) => setCountry(e.target.value)}
-            className="w-full px-3.5 py-2 bg-[#091523] text-foreground text-sm border border-blueprint/50 placeholder:text-muted-foreground/50 focus:outline-none focus:ring-1 focus:ring-accent-blue focus:border-accent-blue transition-colors rounded-none"
+            className="w-full px-3 py-2.5 bg-[#091523] text-foreground text-base sm:text-sm border border-blueprint/50 placeholder:text-muted-foreground/50 focus:outline-none focus:ring-1 focus:ring-accent-blue focus:border-accent-blue transition-colors rounded-none"
             placeholder="United States"
           />
         </div>
@@ -144,19 +144,19 @@ export default function JoinForm({ compact = false, onSuccess, onOpenChapterOne 
           <button
             type="button"
             onClick={() => setShowContactInfo(!showContactInfo)}
-            className="flex items-center justify-between w-full text-left py-1 text-xs font-condensed uppercase tracking-wider text-accent-blue hover:text-cyan-glow transition-colors"
+            className="flex items-center justify-between w-full text-left py-1 text-xs font-condensed uppercase tracking-wider text-accent-blue hover:text-cyan-glow transition-colors cursor-pointer"
           >
             <span className="flex items-center gap-1.5">
-              <HelpCircle className="h-3.5 w-3.5" />
-              Contact Information <span className="text-[10px] text-muted-foreground">(Not Required)</span>
+              <HelpCircle className="h-3.5 w-3.5 shrink-0" />
+              <span>Contact Information <span className="text-[10px] text-muted-foreground font-normal">(Not Required)</span></span>
             </span>
-            <span className="text-[10px] underline">
+            <span className="text-[10px] underline ml-2 shrink-0">
               {showContactInfo ? "Hide" : "Add Optional Email"}
             </span>
           </button>
 
           {showContactInfo && (
-            <div className="mt-2.5 p-3 rounded bg-navy-mid/70 border border-blueprint/30 space-y-2">
+            <div className="mt-2.5 p-3 rounded bg-navy-mid/80 border border-blueprint/30 space-y-2">
               <p className="text-[11px] text-muted-foreground leading-relaxed">
                 Contact information is completely optional. It helps prove these are real people and receive a monthly newsletter at most. If you prefer not to share, you know where the website is!
               </p>
@@ -164,7 +164,7 @@ export default function JoinForm({ compact = false, onSuccess, onOpenChapterOne 
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full px-3.5 py-2 bg-[#060D17] text-foreground text-sm border border-blueprint/40 placeholder:text-muted-foreground/50 focus:outline-none focus:ring-1 focus:ring-accent-blue focus:border-accent-blue transition-colors rounded-none"
+                className="w-full px-3 py-2 bg-[#060D17] text-foreground text-base sm:text-sm border border-blueprint/40 placeholder:text-muted-foreground/50 focus:outline-none focus:ring-1 focus:ring-accent-blue focus:border-accent-blue transition-colors rounded-none"
                 placeholder="Optional Email Address"
               />
             </div>
@@ -178,12 +178,12 @@ export default function JoinForm({ compact = false, onSuccess, onOpenChapterOne 
               type="checkbox"
               checked={requestCall}
               onChange={(e) => setRequestCall(e.target.checked)}
-              className="mt-1 h-4 w-4 rounded border-blueprint/60 text-accent-blue focus:ring-accent-blue bg-[#091523]"
+              className="mt-1 h-4 w-4 rounded border-blueprint/60 text-accent-blue focus:ring-accent-blue bg-[#091523] shrink-0"
             />
             <div className="text-xs">
               <span className="font-condensed font-bold tracking-wider uppercase text-foreground flex items-center gap-1.5">
-                <PhoneCall className="h-3.5 w-3.5 text-accent-blue" />
-                Personal Welcome Call from Luke Young
+                <PhoneCall className="h-3.5 w-3.5 text-accent-blue shrink-0" />
+                <span>Personal Welcome Call from Luke Young</span>
               </span>
               <p className="text-[11px] text-muted-foreground mt-0.5 leading-relaxed">
                 (Book author, not website designer) — If you just read a 300-page book on policy and joined, it's the least I can do!
@@ -201,7 +201,7 @@ export default function JoinForm({ compact = false, onSuccess, onOpenChapterOne 
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
                 required={requestCall}
-                className="w-full px-3 py-1.5 bg-[#060D17] text-foreground text-xs border border-accent-blue/50 placeholder:text-muted-foreground/50 focus:outline-none focus:ring-1 focus:ring-accent-blue"
+                className="w-full px-3 py-2 bg-[#060D17] text-foreground text-base sm:text-xs border border-accent-blue/50 placeholder:text-muted-foreground/50 focus:outline-none focus:ring-1 focus:ring-accent-blue rounded-none"
                 placeholder="(555) 000-0000"
               />
             </div>
@@ -213,8 +213,8 @@ export default function JoinForm({ compact = false, onSuccess, onOpenChapterOne 
           type="submit"
           className="w-full py-3.5 bg-gradient-to-r from-electric via-accent-blue to-electric hover:from-accent-blue hover:to-electric text-white text-xs font-bold tracking-[0.14em] uppercase transition-all duration-200 hover:shadow-[0_0_30px_rgba(35,139,255,0.4)] flex items-center justify-center gap-2 cursor-pointer"
         >
-          <Shield className="h-4 w-4" />
-          Join The League &amp; Get Founder Number
+          <Shield className="h-4 w-4 shrink-0" />
+          <span>Join The League &amp; Get Founder Number</span>
         </button>
 
         <p className="text-[10px] text-center text-muted-foreground/70 font-condensed tracking-wider uppercase">

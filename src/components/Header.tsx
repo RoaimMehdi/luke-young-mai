@@ -35,13 +35,13 @@ export default function Header() {
     >
       <TopStatsBar />
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="flex h-16 md:h-18 items-center justify-between">
+        <div className="flex h-14 md:h-18 items-center justify-between">
           {/* Logo */}
           <Link to="/" className="flex items-center group">
             <img
               src="/logo-ly.png"
               alt="Luke Young"
-              className="h-7 md:h-8 w-auto"
+              className="h-6 sm:h-7 md:h-8 w-auto"
             />
           </Link>
 

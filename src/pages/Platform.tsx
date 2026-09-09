@@ -28,12 +28,12 @@ function HeroSection() {
         <line x1="66%" y1="0" x2="66%" y2="100%" stroke="#164A7B" strokeWidth="0.5" />
       </svg>
 
-      <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center pt-24">
+      <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center pt-28 sm:pt-32">
         <motion.div initial="hidden" animate="visible" variants={stagger}>
           <motion.span variants={fadeUp} className="inline-block px-4 py-1.5 border border-accent-blue/30 bg-accent-blue/5 text-accent-blue text-[11px] font-medium tracking-[0.2em] uppercase mb-6">
             The Platform
           </motion.span>
-          <motion.h1 variants={fadeUp} className="font-heading text-6xl sm:text-7xl md:text-8xl tracking-wide leading-[0.9] text-foreground glow-text">
+          <motion.h1 variants={fadeUp} className="font-heading text-5xl sm:text-7xl md:text-8xl tracking-wide leading-[0.9] text-foreground glow-text">
             THE PLATFORM
           </motion.h1>
           <motion.p variants={fadeUp} className="mt-6 text-lg sm:text-xl text-muted-foreground font-light max-w-xl mx-auto">
